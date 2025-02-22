@@ -37,7 +37,7 @@ export const HealthPrediction = ({ prediction }: HealthPredictionProps) => {
           <div>
             <h3 className="text-sm font-medium text-gray-500 mb-3">Dietary Recommendations</h3>
             <ul className="space-y-3">
-              {prediction.dietRecommendations.map((recommendation, index) => (
+              {prediction.dietRecommendations?.map((recommendation, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
