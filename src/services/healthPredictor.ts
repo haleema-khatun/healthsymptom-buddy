@@ -30,7 +30,13 @@ export const commonSymptoms: Symptom[] = [
   { id: "headache", name: "Headache", severity: 0 },
   { id: "fatigue", name: "Fatigue", severity: 0 },
   { id: "fever", name: "Fever", severity: 0 },
-  { id: "cough", name: "Cough", severity: 0 }
+  { id: "cough", name: "Cough", severity: 0 },
+  { id: "nausea", name: "Nausea", severity: 0 },
+  { id: "dizziness", name: "Dizziness", severity: 0 },
+  { id: "muscle-pain", name: "Muscle Pain", severity: 0 },
+  { id: "sore-throat", name: "Sore Throat", severity: 0 },
+  { id: "stomach-ache", name: "Stomach Ache", severity: 0 },
+  { id: "loss-of-appetite", name: "Loss of Appetite", severity: 0 }
 ];
 
 export const predictHealth = (healthData: HealthData) => {
