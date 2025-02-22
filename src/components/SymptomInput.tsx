@@ -23,6 +23,13 @@ export const SymptomInput = ({ symptoms: initialSymptoms, onSubmit }: SymptomInp
     regularMealTimes: true,
     healthyDiet: true,
   });
+  const [meals, setMeals] = useState({
+    breakfast: true,
+    lunch: true,
+    dinner: true,
+    snacks: 1,
+    balancedMeals: true,
+  });
 
   const handleSeverityChange = (id: string, severity: number[]) => {
     setSymptoms(prev =>
@@ -39,6 +46,7 @@ export const SymptomInput = ({ symptoms: initialSymptoms, onSubmit }: SymptomInp
       weight,
       sleepHours,
       eatingHabits,
+      meals,
     });
   };
 
@@ -112,6 +120,58 @@ export const SymptomInput = ({ symptoms: initialSymptoms, onSubmit }: SymptomInp
                 setEatingHabits(prev => ({ ...prev, healthyDiet: checked }))
               }
             />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="text-sm font-medium text-gray-700">Daily Meals</h3>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-gray-700">Breakfast</label>
+              <Switch
+                checked={meals.breakfast}
+                onCheckedChange={(checked) => 
+                  setMeals(prev => ({ ...prev, breakfast: checked }))
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-gray-700">Lunch</label>
+              <Switch
+                checked={meals.lunch}
+                onCheckedChange={(checked) => 
+                  setMeals(prev => ({ ...prev, lunch: checked }))
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-gray-700">Dinner</label>
+              <Switch
+                checked={meals.dinner}
+                onCheckedChange={(checked) => 
+                  setMeals(prev => ({ ...prev, dinner: checked }))
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm text-gray-700">Number of Snacks</label>
+              <Slider
+                value={[meals.snacks]}
+                max={5}
+                step={1}
+                onValueChange={(value) => setMeals(prev => ({ ...prev, snacks: value[0] }))}
+              />
+              <div className="text-sm text-gray-500 text-right">{meals.snacks} snacks</div>
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="text-sm text-gray-700">Balanced Meals</label>
+              <Switch
+                checked={meals.balancedMeals}
+                onCheckedChange={(checked) => 
+                  setMeals(prev => ({ ...prev, balancedMeals: checked }))
+                }
+              />
+            </div>
           </div>
         </div>
 

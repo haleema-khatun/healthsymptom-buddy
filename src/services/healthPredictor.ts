@@ -5,6 +5,14 @@ export interface Symptom {
   severity: number;
 }
 
+export interface MealInfo {
+  breakfast: boolean;
+  lunch: boolean;
+  dinner: boolean;
+  snacks: number;
+  balancedMeals: boolean;
+}
+
 export interface HealthData {
   symptoms: Symptom[];
   age: number;
@@ -15,6 +23,7 @@ export interface HealthData {
     regularMealTimes: boolean;
     healthyDiet: boolean;
   };
+  meals: MealInfo;
 }
 
 export const commonSymptoms: Symptom[] = [
@@ -25,7 +34,7 @@ export const commonSymptoms: Symptom[] = [
 ];
 
 export const predictHealth = (healthData: HealthData) => {
-  const { symptoms, age, weight, sleepHours, eatingHabits } = healthData;
+  const { symptoms, age, weight, sleepHours, eatingHabits, meals } = healthData;
   
   // Calculate base severity from symptoms
   const totalSeverity = symptoms.reduce((sum, symptom) => sum + symptom.severity, 0);
@@ -43,21 +52,38 @@ export const predictHealth = (healthData: HealthData) => {
   if (!eatingHabits.regularMealTimes) adjustedSeverity += 0.5;
   if (!eatingHabits.healthyDiet) adjustedSeverity += 0.5;
   if (eatingHabits.mealsPerDay < 2 || eatingHabits.mealsPerDay > 5) adjustedSeverity += 0.5;
+
+  // Meal pattern impact
+  if (!meals.breakfast) adjustedSeverity += 0.5;
+  if (!meals.balancedMeals) adjustedSeverity += 0.5;
+  if (meals.snacks > 3) adjustedSeverity += 0.3;
   
   // Calculate confidence
   const confidence = Math.min(Math.round((adjustedSeverity / 10) * 100), 90);
 
   // Define recommendations based on all factors
+  const baseDietRecommendations = [];
+  
+  // Add meal-specific recommendations
+  if (!meals.breakfast) {
+    baseDietRecommendations.push("Start your day with a nutritious breakfast");
+  }
+  if (meals.snacks > 3) {
+    baseDietRecommendations.push("Reduce snacking frequency, focus on balanced main meals");
+  }
+  if (!meals.balancedMeals) {
+    baseDietRecommendations.push("Include proteins, vegetables, and whole grains in your main meals");
+  }
+
   if (adjustedSeverity > 7) {
     return {
       condition: "Severe Condition",
       confidence,
       dietRecommendations: [
+        ...baseDietRecommendations,
         "Light, easily digestible foods",
         "Stay hydrated with clear fluids",
         "Avoid heavy or spicy foods",
-        `Eat ${eatingHabits.mealsPerDay < 3 ? "more" : "smaller"} frequent meals`,
-        `Consider adjusting sleep schedule (current: ${sleepHours} hours)`
       ]
     };
   } else if (adjustedSeverity > 4) {
@@ -65,11 +91,10 @@ export const predictHealth = (healthData: HealthData) => {
       condition: "Moderate Condition",
       confidence,
       dietRecommendations: [
+        ...baseDietRecommendations,
         "Balanced diet with extra vegetables and fruits",
         "Avoid processed foods",
-        "Include lean proteins",
-        "Increase fiber intake",
-        `Aim for ${eatingHabits.regularMealTimes ? "maintaining" : "establishing"} regular meal times`
+        "Include lean proteins"
       ]
     };
   } else {
@@ -77,11 +102,10 @@ export const predictHealth = (healthData: HealthData) => {
       condition: "Mild Condition",
       confidence,
       dietRecommendations: [
+        ...baseDietRecommendations,
         "Regular healthy diet",
         "Plenty of fluids",
-        "Fresh fruits and vegetables",
-        "Whole grains",
-        `Maintain ${sleepHours >= 7 && sleepHours <= 9 ? "current" : "better"} sleep schedule`
+        "Fresh fruits and vegetables"
       ]
     };
   }
