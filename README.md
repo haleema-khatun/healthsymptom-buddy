@@ -46,13 +46,13 @@ To run this project locally:
 
 Install dependencies
 npm install
-# or
+ or
 yarn
 
 Start the dev server
 
 npm run dev
-# or
+ or
 yarn dev
 
 
